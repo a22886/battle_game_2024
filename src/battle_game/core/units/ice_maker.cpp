@@ -74,7 +74,7 @@ void IceMaker::Fire() {
     if (player) {
       auto &input_data = player->GetInputData();
       if (input_data.mouse_button_down[GLFW_MOUSE_BUTTON_LEFT]) {
-        GenerateBullet<bullet::Ice>(position_ + Rotate({0.0f, 0.8f}, rotation_),
+        GenerateBullet<bullet::Ice>(position_ + Rotate({0.0f, 1.2f}, rotation_),
                                     rotation_, GetDamageScale());
         fire_count_down_ =
             FireInterval() * GetFireIntervalScale() * kTickPerSecond;
@@ -88,9 +88,11 @@ void IceMaker::Fire() {
 
 bool IceMaker::IsHit(glm::vec2 position) const {
   position = WorldToLocal(position);
-  return position.x > -0.8f && position.x < 0.8f && position.y > -1.0f &&
-         position.y < 1.0f && position.x + position.y < 1.6f &&
-         position.y - position.x < 1.6f;
+  return (17.0f * position.x - 7.0f * position.y < 8.4f &&
+          17.0f * position.x + 7.0f * position.y > -8.4f &&
+          position.y < 0.5f) ||
+         (17.0f * position.x + 7.0f * position.y < 8.4f &&
+          17.0f * position.x - 7.0f * position.y > -8.4f && position.y > -0.5f);
 }
 
 float IceMaker::Speed() const {
