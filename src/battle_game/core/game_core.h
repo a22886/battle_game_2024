@@ -32,6 +32,7 @@ class GameCore {
   void GeneratePrimaryUnitList();
   uint32_t AllocatePrimaryUnit(uint32_t player_id);
   [[nodiscard]] std::vector<const char *> GetSelectableUnitList() const;
+  [[nodiscard]] std::vector<const char *> GetUnitBriefs() const;
 
   void Update();
   void Render();
@@ -226,6 +227,7 @@ class GameCore {
   std::vector<std::function<uint32_t(uint32_t)>>
       primary_unit_allocation_functions_;
   std::vector<std::string> selectable_unit_list_;
+  std::vector<std::string> unit_briefs_;
 };
 
 template <class BulletType, class... Args>

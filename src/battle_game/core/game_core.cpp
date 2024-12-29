@@ -361,4 +361,11 @@ std::vector<const char *> GameCore::GetSelectableUnitList() const {
   }
   return result;
 }
+std::vector<const char *> GameCore::GetUnitBriefs() const {
+  std::vector<const char *> result;
+  for (auto &unit_brief : unit_briefs_) {
+    result.emplace_back(unit_brief.data());
+  }
+  return result;
+}
 }  // namespace battle_game

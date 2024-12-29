@@ -16,7 +16,8 @@ void GameCore::GeneratePrimaryUnitList() {
   unit = std::make_unique<UnitType>(nullptr, 0, 0);                          \
   AddPrimaryUnitAllocationFunction<UnitType>();                              \
   selectable_unit_list_.push_back(unit->UnitName() + std::string(" - By ") + \
-                                  unit->Author());
+                                  unit->Author());                           \
+  unit_briefs_.push_back(unit->Brief());
 
   /*
    * TODO: Add Your Unit Here!

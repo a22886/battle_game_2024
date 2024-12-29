@@ -100,6 +100,7 @@ class Unit : public Object {
 
   [[nodiscard]] virtual const char *UnitName() const;
   [[nodiscard]] virtual const char *Author() const;
+  [[nodiscard]] virtual const char *Brief() const;
 
  protected:
   uint32_t player_id_{};

@@ -212,4 +212,7 @@ const char *Unit::UnitName() const {
 const char *Unit::Author() const {
   return "Unknown Author";
 }
+const char *Unit::Brief() const {
+  return "Unknown Features";
+}
 }  // namespace battle_game

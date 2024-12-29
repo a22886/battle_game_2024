@@ -303,6 +303,8 @@ void App::UpdateImGui() {
       auto selectable_list = game_core_->GetSelectableUnitList();
       ImGui::Combo(u8"选择你的单位（重生后生效）", &player->SelectedUnit(),
                    selectable_list.data(), selectable_list.size());
+      auto unit_briefs = game_core_->GetUnitBriefs();
+      ImGui::Text(unit_briefs[player->SelectedUnit()]);
       if (ImGui::Button(u8"自毁")) {
         auto unit = game_core_->GetUnit(player->GetPrimaryUnitId());
         if (unit) {
