@@ -14,11 +14,15 @@ class Bullet : public Object {
          glm::vec2 position,
          float rotation,
          float damage_scale);
+  [[nodiscard]] virtual float BasicDamage() const;
+  [[nodiscard]] virtual float Speed() const;
   ~Bullet() override;
 
  protected:
   uint32_t unit_id_{};
   uint32_t player_id_{};
   float damage_scale_{1.0f};
+
+  glm::vec2 velocity_;
 };
 }  // namespace battle_game

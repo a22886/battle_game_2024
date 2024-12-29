@@ -98,12 +98,12 @@ class GameCore {
       const {
     return bullets_;
   }
-  [[nodiscard]] const std::map<uint32_t, std::unique_ptr<Particle>>
-      &GetParticles() const {
+  [[nodiscard]] const std::map<uint32_t, std::unique_ptr<Particle>> &
+  GetParticles() const {
     return particles_;
   }
-  [[nodiscard]] const std::map<uint32_t, std::unique_ptr<Obstacle>>
-      &GetObstacles() const {
+  [[nodiscard]] const std::map<uint32_t, std::unique_ptr<Obstacle>> &
+  GetObstacles() const {
     return obstacles_;
   }
   [[nodiscard]] const std::map<uint32_t, std::unique_ptr<Player>> &GetPlayers()
@@ -124,6 +124,20 @@ class GameCore {
   void PushEventDealDamage(uint32_t dst_unit_id,
                            uint32_t src_unit_id,
                            float damage);
+
+  void PushEventChangeSpeedScale(uint32_t unit_id,
+                                 float speed_scale,
+                                 float seconds);
+  void PushEventChangeDamageScale(uint32_t unit_id,
+                                  float damage_scale,
+                                  float seconds);
+  void PushEventChangeHealthScale(uint32_t unit_id,
+                                  float health_scale,
+                                  float seconds);
+  void PushEventChangeFireIntervalScale(uint32_t unit_id,
+                                        float fire_interval_scale,
+                                        float seconds);
+
   void PushEventKillUnit(uint32_t dst_unit_id, uint32_t src_unit_id);
   void PushEventRemoveObstacle(uint32_t obstacle_id);
   void PushEventRemoveBullet(uint32_t bullet_id);

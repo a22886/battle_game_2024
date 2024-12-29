@@ -19,11 +19,22 @@ class Unit : public Object {
   void SetPosition(glm::vec2 position);
   void SetRotation(float rotation);
 
-  [[nodiscard]] virtual float GetDamageScale() const;
-  [[nodiscard]] virtual float GetSpeedScale() const;
+  [[nodiscard]] float &GetDamageScale();
+  void ChangeDamage(float damage_scale, float seconds);
+
+  [[nodiscard]] virtual float Speed() const;
+  [[nodiscard]] virtual float AngularSpeed() const;
+  [[nodiscard]] float &GetSpeedScale();
+  void ChangeSpeed(float speed_scale, float seconds);
+
+  [[nodiscard]] virtual float FireInterval() const;
+  [[nodiscard]] float &GetFireIntervalScale();
+  void ChangeFireInterval(float fire_interval_scale, float seconds);
+
   [[nodiscard]] virtual float BasicMaxHealth() const;
-  [[nodiscard]] virtual float GetHealthScale() const;
-  [[nodiscard]] virtual float GetMaxHealth() const {
+  [[nodiscard]] float &GetHealthScale();
+  void ChangeHealth(float health_scale, float seconds);
+  [[nodiscard]] float GetMaxHealth() {
     return std::max(GetHealthScale() * BasicMaxHealth(), 1.0f);
   }
 
@@ -42,6 +53,8 @@ class Unit : public Object {
   void SetHealth(float new_health) {
     health_ = std::clamp(new_health, 0.0f, 1.0f);
   }
+
+  void CountDown();
 
   void SetLifeBarLength(float new_length);
   void SetLifeBarOffset(glm::vec2 new_offset);
@@ -72,6 +85,13 @@ class Unit : public Object {
    * */
   [[nodiscard]] virtual bool IsHit(glm::vec2 position) const = 0;
 
+  /*
+   * This function wraps PushEventMoveUnit andPushEventRotateUnit. The
+   * offsets are usually 0 or 1, because we multiplied it with speed inside the
+   * implementation.
+   * */
+  void MoveAndRotate(glm::vec2 offset, float rotation_offset);
+
   template <class BulletType, class... Args>
   void GenerateBullet(glm::vec2 position,
                       float rotation,
@@ -93,6 +113,22 @@ class Unit : public Object {
 
  private:
   float fadeout_health_;
+
+ protected:
+  float speed_scale_{1.0f};
+  int speed_change_count_down_{0};
+
+  float damage_scale_{1.0f};
+  int damage_change_count_down_{0};
+
+  float health_scale_{1.0f};
+  float health_change_count_down_{0};
+
+  int fire_count_down_{0};
+  float fire_interval_scale_{1.0f};
+  int fire_interval_change_count_down_{0};
+
+  int position_change_count_down_{0};
 };
 
 }  // namespace battle_game

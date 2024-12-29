@@ -28,27 +28,100 @@ Unit::Unit(GameCore *game_core, uint32_t id, uint32_t player_id)
 }
 
 void Unit::SetPosition(glm::vec2 position) {
-  position_ = position;
+  if (!position_change_count_down_)
+    position_ = position;
 }
 
 void Unit::SetRotation(float rotation) {
-  rotation_ = rotation;
+  if (!position_change_count_down_)
+    rotation_ = rotation;
 }
 
-float Unit::GetSpeedScale() const {
+float Unit::Speed() const {
+  return 3.0f;
+}
+
+float Unit::AngularSpeed() const {
+  return glm::radians<float>(180.0f);
+}
+
+void Unit::ChangeSpeed(float speed_scale, float seconds) {
+  if (GetSpeedScale() > 2.0f || GetSpeedScale() < 0.5f)
+    return;  // Set barrier for scaling
+  GetSpeedScale() *= speed_scale;
+  speed_change_count_down_ = seconds * kTickPerSecond;
+}
+
+float &Unit::GetSpeedScale() {
+  return speed_scale_;
+}
+
+void Unit::ChangeDamage(float damage_scale, float seconds) {
+  if (GetDamageScale() > 2.0f || GetDamageScale() < 0.5f)
+    return;  // Set barrier for scaling
+  GetDamageScale() *= damage_scale;
+  damage_change_count_down_ = seconds * kTickPerSecond;
+}
+
+float &Unit::GetDamageScale() {
+  return damage_scale_;
+}
+
+float Unit::FireInterval() const {
   return 1.0f;
 }
 
-float Unit::GetDamageScale() const {
-  return 1.0f;
+void Unit::ChangeFireInterval(float fire_interval_scale, float seconds) {
+  if (GetFireIntervalScale() > 2.0f || GetFireIntervalScale() < 0.5f)
+    return;  // Set barrier for scaling
+  GetFireIntervalScale() *= fire_interval_scale;
+  fire_count_down_ *= GetFireIntervalScale();
+  fire_interval_change_count_down_ = seconds * kTickPerSecond;
+}
+
+float &Unit::GetFireIntervalScale() {
+  return fire_interval_scale_;
 }
 
 float Unit::BasicMaxHealth() const {
   return 100.0f;
 }
 
-float Unit::GetHealthScale() const {
-  return 1.0f;
+float &Unit::GetHealthScale() {
+  return health_scale_;
+}
+
+void Unit::ChangeHealth(float health_scale, float seconds) {
+  if (GetHealthScale() > 2.0f || GetHealthScale() < 0.5f)
+    return;  // Set barrier for scaling
+  GetHealthScale() *= health_scale;
+  health_change_count_down_ = seconds * kTickPerSecond;
+}
+
+void Unit::CountDown() {
+  if (speed_change_count_down_ == 0)
+    speed_scale_ = 1.0f;
+  else if (speed_change_count_down_ > 0)
+    speed_change_count_down_--;
+
+  if (damage_change_count_down_ == 0)
+    damage_scale_ = 1.0f;
+  else if (damage_change_count_down_ > 0)
+    damage_change_count_down_--;
+
+  if (health_change_count_down_ == 0)
+    health_scale_ = 1.0f;
+  else if (health_change_count_down_ > 0)
+    health_change_count_down_--;
+
+  if (fire_interval_change_count_down_ == 0) {
+    fire_count_down_ /= fire_interval_scale_;
+    fire_interval_scale_ = 1.0f;
+  } else if (fire_interval_change_count_down_ > 0)
+    fire_interval_change_count_down_--;
+
+  if (position_change_count_down_ > 0)
+    position_change_count_down_--;
 }
 
 void Unit::SetLifeBarLength(float new_length) {
@@ -116,6 +189,24 @@ void Unit::RenderLifeBar() {
 }
 
 void Unit::RenderHelper() {
+}
+
+void Unit::MoveAndRotate(glm::vec2 offset, float rotation_offset) {
+  if (offset != glm::vec2{0.0f, 0.0f}) {
+    offset *= kSecondPerTick * Speed() * GetSpeedScale();
+
+    auto new_position =
+        position_ + glm::vec2{glm::rotate(glm::mat4{1.0f}, rotation_,
+                                          glm::vec3{0.0f, 0.0f, 1.0f}) *
+                              glm::vec4{offset, 0.0f, 0.0f}};
+    if (!game_core_->IsBlockedByObstacles(new_position)) {
+      game_core_->PushEventMoveUnit(id_, new_position);
+    }
+  }
+  if (rotation_offset != 0.0f) {
+    rotation_offset *= kSecondPerTick * AngularSpeed() * GetSpeedScale();
+    game_core_->PushEventRotateUnit(id_, rotation_ + rotation_offset);
+  }
 }
 
 const char *Unit::UnitName() const {

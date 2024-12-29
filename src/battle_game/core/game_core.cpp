@@ -215,6 +215,47 @@ void GameCore::SetCamera(glm::vec2 position, float rotation) {
   camera_rotation_ = rotation;
 }
 
+void GameCore::PushEventChangeSpeedScale(uint32_t unit_id,
+                                         float speed_scale,
+                                         float seconds) {
+  event_queue_.emplace([=]() {
+    auto unit = GetUnit(unit_id);
+    if (unit) {
+      unit->ChangeSpeed(speed_scale, seconds);
+    }
+  });
+}
+void GameCore::PushEventChangeDamageScale(uint32_t unit_id,
+                                          float damage_scale,
+                                          float seconds) {
+  event_queue_.emplace([=]() {
+    auto unit = GetUnit(unit_id);
+    if (unit) {
+      unit->ChangeDamage(damage_scale, seconds);
+    }
+  });
+}
+void GameCore::PushEventChangeHealthScale(uint32_t unit_id,
+                                          float health_scale,
+                                          float seconds) {
+  event_queue_.emplace([=]() {
+    auto unit = GetUnit(unit_id);
+    if (unit) {
+      unit->ChangeHealth(health_scale, seconds);
+    }
+  });
+}
+void GameCore::PushEventChangeFireIntervalScale(uint32_t unit_id,
+                                                float fire_interval_scale,
+                                                float seconds) {
+  event_queue_.emplace([=]() {
+    auto unit = GetUnit(unit_id);
+    if (unit) {
+      unit->ChangeFireInterval(fire_interval_scale, seconds);
+    }
+  });
+}
+
 void GameCore::PushEventDealDamage(uint32_t dst_unit_id,
                                    uint32_t src_unit_id,
                                    float damage) {
