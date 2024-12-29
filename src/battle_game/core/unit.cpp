@@ -46,9 +46,8 @@ float Unit::AngularSpeed() const {
 }
 
 void Unit::ChangeSpeed(float speed_scale, float seconds) {
-  if (GetSpeedScale() > 2.0f || GetSpeedScale() < 0.5f)
-    return;  // Set barrier for scaling
-  GetSpeedScale() *= speed_scale;
+  if (GetSpeedScale() < 2.0f && GetSpeedScale() > 0.5f)
+    GetSpeedScale() *= speed_scale;
   speed_change_count_down_ = seconds * kTickPerSecond;
 }
 
@@ -57,9 +56,8 @@ float &Unit::GetSpeedScale() {
 }
 
 void Unit::ChangeDamage(float damage_scale, float seconds) {
-  if (GetDamageScale() > 2.0f || GetDamageScale() < 0.5f)
-    return;  // Set barrier for scaling
-  GetDamageScale() *= damage_scale;
+  if (GetDamageScale() < 2.0f && GetDamageScale() > 0.5f)
+    GetDamageScale() *= damage_scale;
   damage_change_count_down_ = seconds * kTickPerSecond;
 }
 
@@ -68,14 +66,14 @@ float &Unit::GetDamageScale() {
 }
 
 float Unit::FireInterval() const {
-  return 1.0f;
+  return 0.1f;
 }
 
 void Unit::ChangeFireInterval(float fire_interval_scale, float seconds) {
-  if (GetFireIntervalScale() > 2.0f || GetFireIntervalScale() < 0.5f)
-    return;  // Set barrier for scaling
-  GetFireIntervalScale() *= fire_interval_scale;
-  fire_count_down_ *= GetFireIntervalScale();
+  if (GetFireIntervalScale() < 2.0f && GetFireIntervalScale() > 0.5f) {
+    GetFireIntervalScale() *= fire_interval_scale;
+    fire_count_down_ *= GetFireIntervalScale();
+  }
   fire_interval_change_count_down_ = seconds * kTickPerSecond;
 }
 
@@ -92,9 +90,8 @@ float &Unit::GetHealthScale() {
 }
 
 void Unit::ChangeHealth(float health_scale, float seconds) {
-  if (GetHealthScale() > 2.0f || GetHealthScale() < 0.5f)
-    return;  // Set barrier for scaling
-  GetHealthScale() *= health_scale;
+  if (GetHealthScale() < 2.0f && GetHealthScale() > 0.5f)
+    GetHealthScale() *= health_scale;
   health_change_count_down_ = seconds * kTickPerSecond;
 }
 

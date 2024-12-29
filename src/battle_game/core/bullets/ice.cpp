@@ -1,9 +1,8 @@
-#include "battle_game/core/bullets/laser.h"
-
+#include "battle_game/core/bullets/ice.h"
 #include "battle_game/core/game_core.h"
 
 namespace battle_game::bullet {
-Laser::Laser(GameCore *core,
+Ice::Ice(GameCore *core,
              uint32_t id,
              uint32_t unit_id,
              uint32_t player_id,
@@ -14,14 +13,15 @@ Laser::Laser(GameCore *core,
   velocity_ = Rotate(glm::vec2{0.0f, Speed()}, rotation);
 }
 
-void Laser::Render() {
-  SetTransformation(position_, rotation_, glm::vec2{0.1f, 0.3f});
-  SetColor(game_core_->GetPlayerColor(player_id_));
-  SetTexture(BATTLE_GAME_ASSETS_DIR "textures/particle4.png");
+void Ice::Render() {
+  SetTransformation(position_, rotation_, glm::vec2{0.1f, 0.2f});
+  SetColor(0.5f * game_core_->GetPlayerColor(player_id_) +
+           glm::vec4{0.0f, 0.0f, 0.3f, 0.5f});
+  SetTexture(BATTLE_GAME_ASSETS_DIR "textures/particle5.png");
   DrawModel(0);
 }
 
-void Laser::Update() {
+void Ice::Update() {
   position_ += velocity_ * kSecondPerTick;
   bool should_die = false;
   if (game_core_->IsBlockedByObstacles(position_)) {
@@ -36,6 +36,10 @@ void Laser::Update() {
     if (unit.second->IsHit(position_)) {
       game_core_->PushEventDealDamage(unit.first, id_,
                                       damage_scale_ * BasicDamage());
+      game_core_->PushEventChangeSpeedScale(unit.first, speed_scale_, duration_);
+      game_core_->PushEventChangeFireIntervalScale(
+          unit.first, 1.0f / speed_scale_, duration_);
+      should_die = true;
     }
   }
 
@@ -44,14 +48,14 @@ void Laser::Update() {
   }
 }
 
-float Laser::BasicDamage() const {
-  return 4.0f;
+float Ice::BasicDamage() const {
+  return 8.0f;
 }
 
-float Laser::Speed() const {
-  return 25.0f;
+float Ice::Speed() const {
+  return 18.0f;
 }
 
-Laser::~Laser() {
+Ice::~Ice() {
 }
 }  // namespace battle_game::bullet
