@@ -154,4 +154,9 @@ const char *Tank::UnitName() const {
 const char *Tank::Author() const {
   return "LazyJazz";
 }
+
+const char *Tank::Brief() const {
+  return "Example unit given by the TA.\nMove: WASD\nFire: click\nBullet "
+         "default damage: 10.0\nFire interval: 1.0s";
+}
 }  // namespace battle_game::unit

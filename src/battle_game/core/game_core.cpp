@@ -175,6 +175,15 @@ void GameCore::PushEventRotateUnit(uint32_t unit_id, float new_rotation) {
   });
 }
 
+void GameCore::PushEventBounceBullet(uint32_t bullet_id,
+                                     std::pair<glm::vec2, glm::vec2> normal_vector) {
+  event_queue_.emplace([this, bullet_id, normal_vector]() {
+    auto bullet = GetBullet(bullet_id);
+    if (bullet)
+      bullet->Bounce(normal_vector);
+  });
+}
+
 Unit *GameCore::GetUnit(uint32_t unit_id) const {
   if (!units_.count(unit_id)) {
     return nullptr;

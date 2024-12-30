@@ -108,7 +108,7 @@ float IceMaker::BasicMaxHealth() const {
 }
 
 float IceMaker::FireInterval() const {
-  return 0.7f;
+  return 0.9f;
 }
 
 const char *IceMaker::UnitName() const {
@@ -117,5 +117,11 @@ const char *IceMaker::UnitName() const {
 
 const char *IceMaker::Author() const {
   return "a22886";
+}
+
+const char *IceMaker::Brief() const {
+  return "Can only fire bullets to the front.\nMove: WASD\nFire: click\nBullet "
+         "default damage: 8.0\nBullet effect: slow down enemies 0.8x for "
+         "2.0s\nFire interval: 0.9s";
 }
 }  // namespace battle_game::unit

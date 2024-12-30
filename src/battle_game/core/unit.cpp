@@ -66,7 +66,7 @@ float &Unit::GetDamageScale() {
 }
 
 float Unit::FireInterval() const {
-  return 0.1f;
+  return 1.0f;
 }
 
 void Unit::ChangeFireInterval(float fire_interval_scale, float seconds) {

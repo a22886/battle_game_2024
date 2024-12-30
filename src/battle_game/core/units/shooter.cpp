@@ -108,4 +108,10 @@ const char *Shooter::UnitName() const {
 const char *Shooter::Author() const {
   return "a22886";
 }
+
+const char *Shooter::Brief() const {
+  return "Can only fire bullets to the front.\nMove: WASD\nFire: click\nBullet "
+         "default damage: penetration, typically 10.0 to 15.0\nFire interval: "
+         "0.7s";
+}
 }  // namespace battle_game::unit

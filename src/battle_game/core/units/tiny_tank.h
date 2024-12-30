@@ -15,6 +15,7 @@ class Tank : public Unit {
   void Fire();
   [[nodiscard]] const char *UnitName() const override;
   [[nodiscard]] const char *Author() const override;
+  [[nodiscard]] const char *Brief() const override;
 
   float turret_rotation_{0.0f};
 };

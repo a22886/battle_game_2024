@@ -16,6 +16,7 @@ class Bullet : public Object {
          float damage_scale);
   [[nodiscard]] virtual float BasicDamage() const;
   [[nodiscard]] virtual float Speed() const;
+  void Bounce(std::pair<glm::vec2, glm::vec2> normal_vector);
   ~Bullet() override;
 
  protected:

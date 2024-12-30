@@ -122,6 +122,7 @@ class GameCore {
 
   void PushEventMoveUnit(uint32_t unit_id, glm::vec2 new_position);
   void PushEventRotateUnit(uint32_t unit_id, float new_rotation);
+  void PushEventBounceBullet(uint32_t bullet_id, std::pair<glm::vec2, glm::vec2> normal_vector);
   void PushEventDealDamage(uint32_t dst_unit_id,
                            uint32_t src_unit_id,
                            float damage);

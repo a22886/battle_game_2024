@@ -25,7 +25,17 @@ void Ice::Update() {
   position_ += velocity_ * kSecondPerTick;
   bool should_die = false;
   if (game_core_->IsBlockedByObstacles(position_)) {
-    should_die = true;
+    auto obstacle = game_core_->GetBlockedObstacle(position_);
+    if (obstacle) {
+      auto normal_vector = obstacle->GetSurfaceNormal(position_, velocity_);
+      if (normal_vector != std::pair<glm::vec2, glm::vec2>{
+                               glm::vec2{0.0f, 0.0f}, glm::vec2{0.0f, 0.0f}})
+        game_core_->PushEventBounceBullet(id_, normal_vector);
+      else
+        should_die = true;
+    }
+    else
+      should_die = true;
   }
 
   auto &units = game_core_->GetUnits();

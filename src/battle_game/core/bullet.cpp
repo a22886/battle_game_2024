@@ -16,6 +16,19 @@ Bullet::Bullet(GameCore *core,
   velocity_ = Rotate(glm::vec2{0.0f, Speed()}, rotation);
 };
 
+void Bullet::Bounce(std::pair<glm::vec2, glm::vec2> normal_vector) {
+  auto x = normal_vector.first, n = normal_vector.second;
+  velocity_ -= 2.0f * (glm::dot<2, float>(velocity_, n)) * n;
+  position_ -= 2.0f * (glm::dot<2, float>(position_ - x, n)) * n;
+  if (velocity_.x == 0.0f)
+    rotation_ = glm::pi<float>();
+  else if (velocity_.x > 0.0f) {
+    rotation_ = -glm::acos(glm::normalize(velocity_).y);
+  } else {
+    rotation_ = glm::acos(glm::normalize(velocity_).y);
+  }
+}
+
 float Bullet::BasicDamage() const {
   return 10.0f;
 }
