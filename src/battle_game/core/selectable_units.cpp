@@ -26,6 +26,7 @@ void GameCore::GeneratePrimaryUnitList() {
   ADD_SELECTABLE_UNIT(unit::Shooter);
   ADD_SELECTABLE_UNIT(unit::IceMaker);
   ADD_SELECTABLE_UNIT(unit::Shield);
+  ADD_SELECTABLE_UNIT(unit::Explosive);
 
   unit.reset();
 }
