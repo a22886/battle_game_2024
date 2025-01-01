@@ -33,7 +33,7 @@ Explosive::Explosive(GameCore *game_core, uint32_t id, uint32_t player_id)
       vertices.push_back(
           {{0.0f, 0.0f}, {0.0f, 0.0f}, {0.7f, 0.7f, 0.7f, 1.0f}});
       for (int i = 0; i < 12; i++) {
-        auto theta = (float(5 * i) + 0.5f) * inv_precision;
+        auto theta = float(5 * i) * inv_precision;
         theta *= glm::pi<float>() * 2.0f;
         auto sin_theta = std::sin(theta);
         auto cos_theta = std::cos(theta);
@@ -41,7 +41,7 @@ Explosive::Explosive(GameCore *game_core, uint32_t id, uint32_t player_id)
                             {0.0f, 0.0f},
                             {0.7f, 0.7f, 0.7f, 1.0f}});
         indices.push_back(5 * i + 1);
-        indices.push_back((5 * i + precision - 1) % precision);
+        indices.push_back((5 * i + precision - 2) % precision);
         indices.push_back(precision + 1 + i);
       }
       explosive_model_index = mgr->RegisterModel(vertices, indices);
@@ -120,9 +120,10 @@ void Explosive::CheckExplode() {
 
 bool Explosive::IsHit(glm::vec2 position) const {
   position = WorldToLocal(position);
-  return position.x > -0.8f && position.x < 0.8f && position.y > -1.0f &&
-         position.y < 1.0f && position.x + position.y < 1.6f &&
-         position.y - position.x < 1.6f;
+  // Does not provide collision detection for the spikes because they are too
+  // small. It is very possible that there is no game tick that the bullet
+  // actually hit the spikes.
+  return glm::length(position) < 0.7f;
 }
 
 float Explosive::Speed() const {

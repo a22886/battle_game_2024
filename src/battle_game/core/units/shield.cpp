@@ -103,7 +103,7 @@ float Shield::AngularSpeed() const {
 }
 
 float Shield::BasicMaxHealth() const {
-  return 12500.0f;
+  return 125.0f;
 }
 
 float Shield::FireInterval() const {
