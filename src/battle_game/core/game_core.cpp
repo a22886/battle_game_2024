@@ -175,8 +175,9 @@ void GameCore::PushEventRotateUnit(uint32_t unit_id, float new_rotation) {
   });
 }
 
-void GameCore::PushEventBounceBullet(uint32_t bullet_id,
-                                     std::pair<glm::vec2, glm::vec2> normal_vector) {
+void GameCore::PushEventBounceBullet(
+    uint32_t bullet_id,
+    std::pair<glm::vec2, glm::vec2> normal_vector) {
   event_queue_.emplace([this, bullet_id, normal_vector]() {
     auto bullet = GetBullet(bullet_id);
     if (bullet)
@@ -261,6 +262,15 @@ void GameCore::PushEventChangeFireIntervalScale(uint32_t unit_id,
     auto unit = GetUnit(unit_id);
     if (unit) {
       unit->ChangeFireInterval(fire_interval_scale, seconds);
+    }
+  });
+}
+
+void GameCore::PushEventFixUnit(uint32_t unit_id, float seconds) {
+  event_queue_.emplace([=]() {
+    auto unit = GetUnit(unit_id);
+    if (unit) {
+      unit->FixUnit(seconds);
     }
   });
 }

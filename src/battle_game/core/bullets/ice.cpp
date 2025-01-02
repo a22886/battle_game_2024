@@ -1,14 +1,15 @@
 #include "battle_game/core/bullets/ice.h"
+
 #include "battle_game/core/game_core.h"
 
 namespace battle_game::bullet {
 Ice::Ice(GameCore *core,
-             uint32_t id,
-             uint32_t unit_id,
-             uint32_t player_id,
-             glm::vec2 position,
-             float rotation,
-             float damage_scale)
+         uint32_t id,
+         uint32_t unit_id,
+         uint32_t player_id,
+         glm::vec2 position,
+         float rotation,
+         float damage_scale)
     : Bullet(core, id, unit_id, player_id, position, rotation, damage_scale) {
   velocity_ = Rotate(glm::vec2{0.0f, Speed()}, rotation);
 }
@@ -33,8 +34,7 @@ void Ice::Update() {
         game_core_->PushEventBounceBullet(id_, normal_vector);
       else
         should_die = true;
-    }
-    else
+    } else
       should_die = true;
   }
 
@@ -46,7 +46,8 @@ void Ice::Update() {
     if (unit.second->IsHit(position_)) {
       game_core_->PushEventDealDamage(unit.first, id_,
                                       damage_scale_ * BasicDamage());
-      game_core_->PushEventChangeSpeedScale(unit.first, speed_scale_, duration_);
+      game_core_->PushEventChangeSpeedScale(unit.first, speed_scale_,
+                                            duration_);
       game_core_->PushEventChangeFireIntervalScale(
           unit.first, 1.0f / speed_scale_, duration_);
       should_die = true;

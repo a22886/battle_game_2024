@@ -33,8 +33,7 @@ void Laser::Update() {
         game_core_->PushEventBounceBullet(id_, normal_vector);
       else
         should_die = true;
-    }
-    else
+    } else
       should_die = true;
   }
 

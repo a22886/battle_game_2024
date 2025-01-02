@@ -18,6 +18,7 @@ class Unit : public Object {
   }
   void SetPosition(glm::vec2 position);
   void SetRotation(float rotation);
+  void FixUnit(float seconds);
 
   [[nodiscard]] float &GetDamageScale();
   void ChangeDamage(float damage_scale, float seconds);
@@ -129,7 +130,7 @@ class Unit : public Object {
   float fire_interval_scale_{1.0f};
   int fire_interval_change_count_down_{0};
 
-  int position_change_count_down_{0};
+  int fix_position_count_down_{0};
 };
 
 }  // namespace battle_game

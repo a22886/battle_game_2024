@@ -1,4 +1,5 @@
 #include "battle_game/core/obstacles/trampoline.h"
+
 #include "battle_game/core/game_core.h"
 
 namespace battle_game::obstacle {
@@ -10,7 +11,8 @@ Trampoline::Trampoline(GameCore *game_core,
                        glm::vec2 scale,
                        float duration)
     : Obstacle(game_core, id, position, rotation),
-      duration_(duration * kTickPerSecond) {}
+      duration_(duration * kTickPerSecond) {
+}
 
 bool Trampoline::IsBlocked(glm::vec2 p) const {
   p = WorldToLocal(p);
@@ -18,7 +20,8 @@ bool Trampoline::IsBlocked(glm::vec2 p) const {
          p.y >= -scale_.y;
 }
 
-std::pair<glm::vec2, glm::vec2> Trampoline::GetSurfaceNormal(glm::vec2 origin,
+std::pair<glm::vec2, glm::vec2> Trampoline::GetSurfaceNormal(
+    glm::vec2 origin,
     glm::vec2 terminus) {
   origin = WorldToLocal(origin), terminus = WorldToLocal(terminus);
   glm::vec2 intersection{0.0f}, normal_vector{0.0f};

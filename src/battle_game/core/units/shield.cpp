@@ -1,7 +1,8 @@
+#include "shield.h"
+
 #include "battle_game/core/bullets/bullets.h"
 #include "battle_game/core/game_core.h"
 #include "battle_game/graphics/graphics.h"
-#include "ice_maker.h"
 
 namespace battle_game::unit {
 
@@ -21,8 +22,12 @@ Shield::Shield(GameCore *game_core, uint32_t id, uint32_t player_id)
               {{-0.6f, -0.3f}, {0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
               {{0.6f, -0.3f}, {0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
               {{0.0f, -0.7f}, {0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+              {{0.0f, 0.6f}, {0.0f, 0.0f}, {0.69f, 0.53f, 0.37f, 1.0f}},
+              {{0.0f, 0.4f}, {0.0f, 0.0f}, {0.69f, 0.53f, 0.37f, 1.0f}},
+              {{0.2f, 0.2f}, {0.0f, 0.0f}, {0.69f, 0.53f, 0.37f, 1.0f}},
+              {{-0.2f, 0.2f}, {0.0f, 0.0f}, {0.69f, 0.53f, 0.37f, 1.0f}},
           },
-          {0, 1, 2, 0, 2, 3, 2, 3, 4});
+          {0, 1, 2, 0, 2, 3, 2, 3, 4, 5, 6, 7, 5, 6, 8});
     }
   }
 }
@@ -42,9 +47,7 @@ void Shield::Update() {
 
 void Shield::ShieldMove() {
   auto player = game_core_->GetPlayer(player_id_);
-  if (player && fire_count_down_ < (FireInterval() * GetFireIntervalScale() -
-                                    ShieldDuration()) *
-                                       kTickPerSecond) {
+  if (player) {
     auto &input_data = player->GetInputData();
     glm::vec2 offset{0.0f};
     if (input_data.key_down[GLFW_KEY_W]) {
@@ -74,6 +77,7 @@ void Shield::Fire() {
             position_, rotation_, glm::vec2{0.6f, 0.7f}, ShieldDuration());
         fire_count_down_ =
             FireInterval() * GetFireIntervalScale() * kTickPerSecond;
+        game_core_->PushEventFixUnit(id_, ShieldDuration());
       }
     }
   }
@@ -83,9 +87,7 @@ void Shield::Fire() {
 }
 
 bool Shield::IsHit(glm::vec2 position) const {
-  if (fire_count_down_ >=
-      (FireInterval() * fire_interval_scale_ - ShieldDuration()) *
-          kTickPerSecond)
+  if (fix_position_count_down_)
     return false;
   position = WorldToLocal(position);
   return position.y < 0.7f && 10.0f * position.x - position.y > -5.7f &&

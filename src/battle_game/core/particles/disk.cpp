@@ -1,15 +1,16 @@
-#include "battle_game/core/game_core.h"
 #include "battle_game/core/particles/disk.h"
+
+#include "battle_game/core/game_core.h"
 
 namespace battle_game::particle {
 Disk::Disk(GameCore *game_core,
-             uint32_t id,
-             glm::vec2 position,
-             float rotation,
-             float v,
-             float radius,
-             glm::vec4 color,
-             float decay_scale)
+           uint32_t id,
+           glm::vec2 position,
+           float rotation,
+           float v,
+           float radius,
+           glm::vec4 color,
+           float decay_scale)
     : Particle(game_core, id, position, rotation),
       v_(v),
       radius_(radius),

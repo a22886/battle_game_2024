@@ -28,12 +28,12 @@ Unit::Unit(GameCore *game_core, uint32_t id, uint32_t player_id)
 }
 
 void Unit::SetPosition(glm::vec2 position) {
-  if (!position_change_count_down_)
+  if (!fix_position_count_down_)
     position_ = position;
 }
 
 void Unit::SetRotation(float rotation) {
-  if (!position_change_count_down_)
+  if (!fix_position_count_down_)
     rotation_ = rotation;
 }
 
@@ -95,6 +95,10 @@ void Unit::ChangeHealth(float health_scale, float seconds) {
   health_change_count_down_ = seconds * kTickPerSecond;
 }
 
+void Unit::FixUnit(float seconds) {
+  fix_position_count_down_ = seconds * kTickPerSecond;
+}
+
 void Unit::CountDown() {
   if (speed_change_count_down_ == 0)
     speed_scale_ = 1.0f;
@@ -117,8 +121,8 @@ void Unit::CountDown() {
   } else if (fire_interval_change_count_down_ > 0)
     fire_interval_change_count_down_--;
 
-  if (position_change_count_down_ > 0)
-    position_change_count_down_--;
+  if (fix_position_count_down_ > 0)
+    fix_position_count_down_--;
 }
 
 void Unit::SetLifeBarLength(float new_length) {
